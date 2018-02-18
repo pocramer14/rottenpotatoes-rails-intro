@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
     #create a ratings variable for storing ratings options
     @all_ratings = ['G','PG','PG-13','R']
     #if user has clicked on a parameter (title, release date, etc.), then sort by that parameter
-    if(!(session[:session_key].nil?) && ((params[:key] != 'title') || (params[:key] != 'release_date')))
+    if(!(session[:session_key].nil?) && (!(params[:key] == 'title') || !(params[:key] == 'release_date')))
       if session[:session_key] == 'title'
         @title_css = 'hilite'
         @movies = Movie.order(title: :asc)
