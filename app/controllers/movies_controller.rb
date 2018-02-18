@@ -14,19 +14,33 @@ class MoviesController < ApplicationController
     #create a ratings variable for storing ratings options
     @all_ratings = ['G','PG','PG-13','R']
     #if user has clicked on a parameter (title, release date, etc.), then sort by that parameter
-    if params[:key] == 'title'
+    if(!(session[:session_key].nil?) && ((params[:key] != 'title') || (params[:key] != 'release_date')))
+      if session[:session_key] == 'title'
+        @title_css = 'hilite'
+        @movies = Movie.order(title: :asc)
+      elsif session[:session_key] == 'release_date'
+        @release_css = 'hilite'
+        @movies = Movie.order(release_date: :asc)
+      end
+    elsif params[:key] == 'title'
+      session[:session_key] = 'title'
       @title_css = 'hilite'
       @movies = Movie.order(title: :asc)
     elsif params[:key] == 'release_date'
+      session[:session_key] = 'release_date'
       @release_css = 'hilite'
       @movies = Movie.order(release_date: :asc)
     else
       @movies = Movie.all
       #check if we need to filter by rating
-      if(params[:ratings].nil?) #if nothing has been selected, do not filter
+      if(params[:ratings].nil? && session[:session_ratings].nil?) #if nothing has been selected, do not filter
         @movies = Movie.all
-      else #else, filter, selecting only movies with the selected ratings
+      elsif(!(params[:ratings].nil?)) #else, filter, selecting only movies with the selected ratings
         @rating_filter =params[:ratings].keys
+        session[:session_ratings] = params[:ratings].keys
+        @movies = Movie.where(rating: @rating_filter)
+      else
+        @rating_filter = session[:session_ratings]
         @movies = Movie.where(rating: @rating_filter)
       end
     end
