@@ -11,7 +11,8 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    #create a ratings variable for storing ratings options
+    @all_ratings = ['G','PG','PG-13','R']
     #if user has clicked on a parameter (title, release date, etc.), then sort by that parameter
     if params[:key] == 'title'
       @title_css = 'hilite'
@@ -21,6 +22,13 @@ class MoviesController < ApplicationController
       @movies = Movie.order(release_date: :asc)
     else
       @movies = Movie.all
+      #check if we need to filter by rating
+      if(params[:ratings].nil?) #if nothing has been selected, do not filter
+        @movies = Movie.all
+      else #else, filter, selecting only movies with the selected ratings
+        @rating_filter =params[:ratings].keys
+        @movies = Movie.where(rating: @rating_filter)
+      end
     end
   end
 
