@@ -22,6 +22,7 @@ class MoviesController < ApplicationController
         @release_css = 'hilite'
         @movies = Movie.order(release_date: :asc)
       end
+      session.delete(:session_key)
     elsif params[:key] == 'title'
       session[:session_key] = 'title'
       @title_css = 'hilite'
