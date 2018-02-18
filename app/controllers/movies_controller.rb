@@ -34,13 +34,14 @@ class MoviesController < ApplicationController
     else
       @movies = Movie.all
       #check if we need to filter by rating
-      if(params[:ratings].nil? && session[:session_ratings].nil?) #if nothing has been selected, do not filter
+      if(params[:ratings].nil?) #if nothing has been selected, do not filter
         @movies = Movie.all
-      elsif(!(params[:ratings].nil?)) #else, filter, selecting only movies with the selected ratings
-        @rating_filter =params[:ratings].keys
-        session[:session_ratings] = params[:ratings].keys
-        @movies = Movie.where(rating: @rating_filter)
       else
+        @rating_filter = params[:ratings].key
+        session[:session_ratings] = params[:ratings].key
+        @movies = Movie.where(rating: @rating_filter)
+      end
+      if(!(session[:session_ratings].nil?))
         @rating_filter = session[:session_ratings]
         @movies = Movie.where(rating: @rating_filter)
       end
