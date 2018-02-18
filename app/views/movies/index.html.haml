@@ -4,9 +4,9 @@
 %table#movies
   %thead
     %tr
-      %th Movie Title
-      %th Rating
-      %th Release Date
+      %th#title{:class => @title_css}= link_to "#{@title_glyph}Movie Title".html_safe, movies_path(key: 'title', asc: @next_order), id: 'title_header'
+      %th#rating{:class => @rating_css}= link_to "#{@rating_glyph}Rating".html_safe, movies_path(key: 'rating', asc: @next_order), id: 'rating_header'
+      %th#release_date{:class => @release_css}= link_to "#{@release_glyph}Release Date".html_safe, movies_path(key: 'release_date', asc: @next_order), id: 'release_date_header'
       %th More Info
   %tbody
     - @movies.each do |movie|

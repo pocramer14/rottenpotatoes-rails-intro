@@ -12,6 +12,16 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
+    #if user has clicked on a parameter (title, release date, etc.), then sort by that parameter
+    if params[:key] == 'title'
+      @title_css = 'hilite'
+      @movies = Movie.order(title: :asc)
+    elsif params[:key] == 'release_date'
+      @release_css = 'hilite'
+      @movies = Movie.order(release_date: :asc)
+    else
+      @movies = Movie.all
+    end
   end
 
   def new
